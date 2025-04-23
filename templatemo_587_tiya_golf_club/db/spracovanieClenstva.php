@@ -2,7 +2,7 @@
 
 // PDO databázové pripojenie
 $host = "localhost";
-$dbname = "kontaktny_formular";
+$dbname = "clenstvo_formular";
 $port = 3306;
 $username = "root";
 $password = "";
@@ -11,7 +11,7 @@ $password = "";
 $options = array(
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    );
+);
 
 // Pripojenie PDO
 try {
@@ -22,12 +22,12 @@ try {
 }
 
 // Získanie údajov z formulára
-$name = $_POST["name"];
-$email = $_POST["email"];
-$message = $_POST["message"];
+$fullname = $_POST["full-name"];
+$email2 = $_POST["email"];
+$comment = $_POST["message"];
 // SQL príkaz INSERT
-$sql = "INSERT INTO udaje (name, email, message) 
-    VALUES ('".$name."', '".$email."', '".$message."')";
+$sql = "INSERT INTO udaje (full_name, email, comment) 
+    VALUES ('".$fullname."', '".$email2."', '".$comment."')";
 $statement = $conn->prepare($sql);
 try {
     $insert = $statement->execute();

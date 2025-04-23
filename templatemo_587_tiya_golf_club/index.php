@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+<!--head-->
 <?php  $file_path = "parts/head.php";
 if(!include($file_path)) {
     echo"Failed to include $file_path";} ?>
@@ -338,7 +339,7 @@ if(!include($file_path)) {
 
                         <div class="col-lg-5 col-12 mx-auto">
                         <h4 class="mb-4 pb-lg-2">Please join us!</h4>
-                            <form action="#" method="post" class="custom-form membership-form shadow-lg" role="form">
+                            <form action="db/spracovanieClenstva.php" method="post" class="custom-form membership-form shadow-lg" role="form">
                                 <h4 class="text-white mb-4">Become a member</h4>
 
                                     <div class="form-floating">
