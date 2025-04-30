@@ -1,40 +1,33 @@
 <?php
 
-// PDO databázové pripojenie
-$host = "localhost";
-$dbname = "kontaktny_formular";
-$port = 3306;
-$username = "root";
-$password = "";
+require_once('../classes/Database.php');
 
-// Možnosti
-$options = array(
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    );
+use database\Database;
 
-// Pripojenie PDO
-try {
-    $conn = new PDO('mysql:host='.$host.';dbname='.$dbname.";port=".$port, $username,
-        $password, $options);
-} catch (PDOException $e) {
-    die("Chyba pripojenia: " . $e->getMessage());
-}
-
-// Získanie údajov z formulára
 $name = $_POST["name"];
 $email = $_POST["email"];
 $message = $_POST["message"];
-// SQL príkaz INSERT
-$sql = "INSERT INTO udaje (name, email, message) 
-    VALUES ('".$name."', '".$email."', '".$message."')";
-$statement = $conn->prepare($sql);
-try {
-    $insert = $statement->execute();
-    header("Location: http://localhost/golf_club_project/templatemo_587_tiya_golf_club/index.php");
-    return $insert;
-} catch (\Exception $exception) {
-    return false;
+
+if (empty($name) || empty($email) || empty($message)) {
+    die('Chyba: Všetky polia sú povinné!');
 }
-// Zatvorenie pripojenia
-$conn = null;
+
+$db = (new Database())->getConnection();
+
+$sql = "INSERT INTO kontaktny_formular (name, email, message) VALUES (:name, :email, :message)";
+$stmt = $db->prepare($sql);
+
+$ulozene = $stmt->execute([
+    ':name' => $name,
+    ':email' => $email,
+    ':message' => $message
+]);
+
+if ($ulozene) {
+    header('Location: ../index.php');
+    exit;
+} else {
+    http_response_code(500);
+    die('Chyba pri odosielaní správy do databázy!');
+}
+?>
