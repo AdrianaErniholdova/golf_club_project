@@ -8,6 +8,8 @@
     <title>Tiya Golf Club - Free HTML CSS Template</title>
 
     <!-- CSS FILES -->
+    <base href="/golf_club_project/templatemo_587_tiya_golf_club/">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
