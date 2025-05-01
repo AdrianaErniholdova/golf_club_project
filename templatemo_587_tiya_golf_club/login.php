@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user->login($loginOrEmail, $password);
 
         if ($_SESSION['rola'] === 'admin') {
-            header('Location: admin/admin_events.php');
+            header('Location: admin/edits.php');
         } else {
             header('Location: index.php');
         }
