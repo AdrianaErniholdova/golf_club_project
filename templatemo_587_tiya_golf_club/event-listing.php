@@ -1,3 +1,16 @@
+<?php
+require_once __DIR__ . '/classes/Database.php';
+require_once __DIR__ . '/classes/Events.php';
+
+use database\Database;
+use events\Events;
+
+$database = new Database();
+$pdo = $database->getConnection();
+
+$stmt = $pdo->query("SELECT * FROM events ORDER BY date DESC");
+$events = $stmt->fetchAll();
+?>
 <!doctype html>
 <html lang="en">
 <!--head-->
@@ -31,7 +44,6 @@ if(!include($file_path)) {
 
                             <h1 class="text-white mb-4 pb-2">Event Listing</h1>
 
-                            <a href="#section_3" class="btn custom-btn smoothscroll me-3">Explore Events</a>
                         </div>
 
                     </div>
@@ -46,201 +58,58 @@ if(!include($file_path)) {
                     <div class="row">
 
                         <div class="col-lg-12 col-12">
-                            <h2 class="mb-lg-5 mb-4">Latest events</h2>
+                            <h2 class="mb-lg-5 mb-4">Upcoming events</h2>
                         </div>
-
-                        <div class="col-lg-6 col-12 mb-5 mb-lg-0">
+                        <?php foreach ($events as $event): ?>
+                        <div class="col-lg-6 col-12 mb-5 mb-lg-0"> <br> <br>
                             <div class="custom-block-image-wrap">
-                                <a href="admin/edits.php">
+                                <a href="">
                                     <img src="images/anna-rosar-ew-olGvgCCs-unsplash.jpg" class="custom-block-image img-fluid" alt="">
 
                                     <i class="custom-block-icon bi-link"></i>
                                 </a>
 
                                 <div class="custom-block-date-wrap">
-                                    <strong class="text-white">18 Feb 2023</strong>
+                                    <strong class="text-white"><?= $event['date'] ?></strong>
                                 </div>
 
                                 <div class="custom-btn-wrap">
-                                    <a href="admin/edits.php" class="btn custom-btn">Buy Ticket</a>
+                                    <?php
+                                    $isUserLoggedIn = isset($_SESSION['rola']) && $_SESSION['rola'] === 'pouzivatel';
+                                    ?>
+                                    <a href="<?php echo $isUserLoggedIn ? 'php' : '#'; ?>"
+                                       class="btn custom-btn"
+                                       onclick="<?php if (!$isUserLoggedIn) echo "alert('Must be logged in to proceed'); return false;"; ?>">
+                                        Buy Ticket
+                                    </a>
                                 </div>
                             </div>
 
                             <div class="custom-block-info">
-                                <a href="admin/edits.php" class="events-title mb-2">Single Tournament</a>
+                                <a href="" class="events-title mb-2"><?= htmlspecialchars($event['title']) ?></a>
 
-                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit do eiusmod tempor</p>
+                                <p class="mb-0"><?= htmlspecialchars($event['description']) ?></p>
 
 
                                 <div class="border-top mt-4 pt-3">
                                     <div class="d-flex flex-wrap align-items-center mb-1">
                                         <span class="custom-block-span">Location:</span>
 
-                                        <p class="mb-0">National Center, NYC</p>
+                                        <p class="mb-0"><?= $event['location'] ?></p>
                                     </div>
 
                                     <div class="d-flex flex-wrap align-items-center">
                                         <span class="custom-block-span">Ticket:</span>
 
-                                        <p class="mb-0">$150</p>
+                                        <p class="mb-0">$<?= $event['price'] ?></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <?php endforeach; ?>
 
-                        <div class="col-lg-6 col-12">
-                            <div class="custom-block-image-wrap">
-                                <a href="admin/edits.php">
-                                    <img src="images/frederik-rosar-NDSZcCfnsbY-unsplash.jpg" class="custom-block-image img-fluid" alt="">
-
-                                    <i class="custom-block-icon bi-link"></i>
-                                </a>
-
-                                <div class="custom-block-date-wrap">
-                                    <strong class="text-white">24 Feb 2023</strong>
-                                </div>
-
-                                <div class="custom-btn-wrap">
-                                    <a href="admin/edits.php" class="btn custom-btn">Buy Ticket</a>
-                                </div>
-                            </div>
-
-                            <div class="custom-block-info">
-                                <a href="admin/edits.php" class="events-title mb-2">Group Tournaments</a>
-
-                                <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit do eiusmod tempor</p>
-
-
-                                <div class="border-top mt-4 pt-3">
-                                    <div class="d-flex flex-wrap align-items-center mb-1">
-                                        <span class="custom-block-span">Location:</span>
-
-                                        <p class="mb-0">National Center, NYC</p>
-                                    </div>
-
-                                    <div class="d-flex flex-wrap align-items-center">
-                                        <span class="custom-block-span">Ticket:</span>
-
-                                        <p class="mb-0">$250</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
             </section>
 
-
-            <section class="events-section events-listing-section section-bg section-padding" id="section_3">
-                <div class="container">
-                    <div class="row">
-
-                        <div class="col-lg-12 col-12">
-                            <h2 class="mb-3">Upcoming Events</h2>
-                        </div>
-
-                        <div class="row custom-block mb-3">
-                            <div class="col-lg-2 col-md-4 col-12 order-2 order-md-0 order-lg-0">
-                                <div class="custom-block-date-wrap d-flex d-lg-block d-md-block align-items-center mt-3 mt-lg-0 mt-md-0">
-                                    <h6 class="custom-block-date mb-lg-1 mb-0 me-3 me-lg-0 me-md-0">24</h6>
-                                    
-                                    <strong class="text-white">Feb 2023</strong>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 col-md-8 col-12 order-1 order-lg-0">
-                                <div class="custom-block-image-wrap">
-                                    <a href="admin/edits.php">
-                                        <img src="images/professional-golf-player.jpg" class="custom-block-image img-fluid" alt="">
-
-                                        <i class="custom-block-icon bi-link"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-12 order-3 order-lg-0">
-                                <div class="custom-block-info mt-2 mt-lg-0">
-                                    <a href="admin/edits.php" class="events-title mb-3">Private Golf Courses</a>
-
-                                    <p class="mb-0">You can browse many different categories of CSS templates using <a href="https://templatemo.com/tag" target="_blank">tags</a> on TemplateMo website. Feel free to browse more templates and download them free instantly.</p>
-
-                                    <div class="d-flex flex-wrap border-top mt-4 pt-3">
-
-                                        <div class="mb-4 mb-lg-0">
-                                            <div class="d-flex flex-wrap align-items-center mb-1">
-                                                <span class="custom-block-span">Location:</span>
-
-                                                <p class="mb-0">National Center, NYC</p>
-                                            </div>
-
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="custom-block-span">Ticket:</span>
-
-                                                <p class="mb-0">$150</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex align-items-center ms-lg-auto">
-                                            <a href="admin/edits.php" class="btn custom-btn">Buy Ticket</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row custom-block custom-block-bg">
-                            <div class="col-lg-2 col-md-4 col-12 order-2 order-md-0 order-lg-0">
-                                <div class="custom-block-date-wrap d-flex d-lg-block d-md-block align-items-center mt-3 mt-lg-0 mt-md-0">
-                                    <h6 class="custom-block-date mb-lg-1 mb-0 me-3 me-lg-0 me-md-0">16</h6>
-                                    
-                                    <strong class="text-white">Mar 2023</strong>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-4 col-md-8 col-12 order-1 order-lg-0">
-                                <div class="custom-block-image-wrap">
-                                    <a href="admin/edits.php">
-                                        <img src="images/girl-taking-selfie-with-friends-golf-field.jpg" class="custom-block-image img-fluid" alt="">
-
-                                        <i class="custom-block-icon bi-link"></i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6 col-12 order-3 order-lg-0">
-                                <div class="custom-block-info mt-2 mt-lg-0">
-                                    <a href="admin/edits.php" class="events-title mb-3">Group tournament activities</a>
-
-                                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
-                                    <div class="d-flex flex-wrap border-top mt-4 pt-3">
-
-                                        <div class="mb-4 mb-lg-0">
-                                            <div class="d-flex flex-wrap align-items-center mb-1">
-                                                <span class="custom-block-span">Location:</span>
-
-                                                <p class="mb-0">National Center, NYC</p>
-                                            </div>
-
-                                            <div class="d-flex flex-wrap align-items-center">
-                                                <span class="custom-block-span">Ticket:</span>
-
-                                                <p class="mb-0">$250</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="d-flex align-items-center ms-lg-auto">
-                                            <a href="admin/edits.php" class="btn custom-btn">Buy Ticket</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
         </main>
 
         <!--footer-->

@@ -4,7 +4,7 @@ session_start();
 
 <nav class="navbar navbar-expand-lg custom-navbar">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <a class="navbar-brand d-flex align-items-center" href="index.php">
             <img src="images/logo.png" class="navbar-brand-image img-fluid" alt="Tiya Golf Club">
             <span class="navbar-brand-text">
                             Tiya
@@ -42,13 +42,8 @@ session_start();
                     <a class="nav-link click-scroll" href="#section_5">Contact Us</a>
                 </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarLightDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Pages</a>
-
-                    <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="navbarLightDropdownMenuLink">
-                        <li><a class="dropdown-item" href="event-listing.php">Event Listing</a></li>
-
-                    </ul>
+                <li class="nav-item">
+                    <a class="nav-link click-scroll" href="event-listing.php">Event Listing</a>
                 </li>
             </ul>
 
@@ -71,6 +66,7 @@ session_start();
     </div>
     <div class="offcanvas-body d-flex flex-column">
         <form class="custom-form member-login-form" action="login.php" method="post" role="form">
+            <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
             <div class="member-login-form-body">
                 <div class="mb-4">

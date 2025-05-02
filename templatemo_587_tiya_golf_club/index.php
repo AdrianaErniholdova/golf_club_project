@@ -134,23 +134,7 @@ if(!include($file_path)) {
                 <div class="container">
                     <div class="row">
 
-                        <div class="col-lg-6 col-12">
-                            <div class="section-bg-image-block">
-                                <h2 class="mb-lg-3">Get our newsletter</h2>
-
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor ut labore et dolore.</p>
-
-                                <form action="#" method="get" class="custom-form mt-lg-4 mt-2" role="form">
-                                    <div class="input-group input-group-lg">
-                                        <span class="input-group-text bi-envelope" id="basic-addon1"></span>
-
-                                        <input type="email" name="email" id="email" pattern="[^ @]*@[^ @]*" class="form-control" placeholder="Email address" required="">
-
-                                        <button type="submit" class="form-control">Subscribe</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        <div class="col-lg-6 col-12"></div>
 
                     </div>
                 </div>
@@ -338,7 +322,7 @@ if(!include($file_path)) {
 
                             <div class="col-lg-4 col-md-8 col-12 order-1 order-lg-0">
                                 <div class="custom-block-image-wrap">
-                                    <a href="admin/edits.php">
+                                    <a href="admin/events/add_events.php">
                                         <img src="images/professional-golf-player.jpg" class="custom-block-image img-fluid" alt="">
 
                                         <i class="custom-block-icon bi-link"></i>
@@ -348,7 +332,7 @@ if(!include($file_path)) {
 
                             <div class="col-lg-6 col-12 order-3 order-lg-0">
                                 <div class="custom-block-info mt-2 mt-lg-0">
-                                    <a href="admin/edits.php" class="events-title mb-3">Private activities</a>
+                                    <a href="admin/events/add_events.php" class="events-title mb-3">Private activities</a>
 
                                     <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
@@ -369,7 +353,7 @@ if(!include($file_path)) {
                                         </div>
 
                                         <div class="d-flex align-items-center ms-lg-auto">
-                                            <a href="admin/edits.php" class="btn custom-btn">Buy Ticket</a>
+                                            <a href="admin/events/add_events.php" class="btn custom-btn">Buy Ticket</a>
                                         </div>
                                     </div>
                                 </div>
@@ -387,7 +371,7 @@ if(!include($file_path)) {
 
                             <div class="col-lg-4 col-md-8 col-12 order-1 order-lg-0">
                                 <div class="custom-block-image-wrap">
-                                    <a href="admin/edits.php">
+                                    <a href="admin/events/add_events.php">
                                         <img src="images/girl-taking-selfie-with-friends-golf-field.jpg" class="custom-block-image img-fluid" alt="">
 
                                         <i class="custom-block-icon bi-link"></i>
@@ -397,7 +381,7 @@ if(!include($file_path)) {
 
                             <div class="col-lg-6 col-12 order-3 order-lg-0">
                                 <div class="custom-block-info mt-2 mt-lg-0">
-                                    <a href="admin/edits.php" class="events-title mb-3">Group tournament activities</a>
+                                    <a href="admin/events/add_events.php" class="events-title mb-3">Group tournament activities</a>
 
                                     <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 
@@ -418,7 +402,7 @@ if(!include($file_path)) {
                                         </div>
 
                                         <div class="d-flex align-items-center ms-lg-auto">
-                                            <a href="admin/edits.php" class="btn custom-btn">Buy Ticket</a>
+                                            <a href="admin/events/add_events.php" class="btn custom-btn">Buy Ticket</a>
                                         </div>
                                     </div>
                                 </div>

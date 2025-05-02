@@ -16,7 +16,7 @@ class Database
         $this->connect();
     }
 
-    protected function connect(): void
+    public function connect(): void
     {
         $config = DATABASE;
 
