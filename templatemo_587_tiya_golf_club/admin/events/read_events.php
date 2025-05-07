@@ -5,11 +5,14 @@ require_once __DIR__ . '/../../classes/Events.php';
 use database\Database;
 use events\Events;
 
+// Create Events instance which will handle database operations
+$eventsHandler = new Events();
 $database = new Database();
 $pdo = $database->getConnection();
 
+// Get all events using the database connection
 $stmt = $pdo->query("SELECT * FROM events ORDER BY date DESC");
-$events = $stmt->fetchAll();
+$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!doctype html>
 <html lang="en">
@@ -22,32 +25,40 @@ $events = $stmt->fetchAll();
         <a href="add_events.php" class="btn btn-primary mb-4">+ Add Event</a>
 
         <div class="row">
-            <?php foreach ($events as $event): ?>
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow rounded overflow-hidden border-0">
-                        <div class="position-relative">
-                            <img src="images/event-default.jpg" class="card-img-top" alt="Event Image" style="height: 300px; object-fit: cover;">
-                            <div class="position-absolute bottom-0 start-0 bg-success text-white px-3 py-2">
-                                <?= htmlspecialchars($event['date']) ?>
+            <?php if (!empty($events)): ?>
+                <?php foreach ($events as $event): ?>
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow rounded overflow-hidden border-0">
+                            <div class="position-relative">
+                                <img src="images/event-default.jpg" class="card-img-top" alt="Event Image" style="height: 300px; object-fit: cover;">
+                                <div class="position-absolute bottom-0 start-0 bg-success text-white px-3 py-2">
+                                    <?= isset($event['date']) ? htmlspecialchars($event['date']) : 'No date' ?>
+                                </div>
+                                <div class="position-absolute bottom-0 end-0 bg-warning text-white px-3 py-2 fw-bold">
+                                    Buy Ticket
+                                </div>
                             </div>
-                            <div class="position-absolute bottom-0 end-0 bg-warning text-white px-3 py-2 fw-bold">
-                                Buy Ticket
+
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold"><?= isset($event['title']) ? htmlspecialchars($event['title']) : 'No title' ?></h5>
+                                <p class="card-text"><?= isset($event['description']) ? htmlspecialchars($event['description']) : 'No description' ?></p>
+                                <hr>
+                                <p class="mb-1"><strong>Location:</strong> <?= isset($event['location']) ? htmlspecialchars($event['location']) : 'No location' ?></p>
+                                <p><strong>Ticket:</strong> <?= isset($event['price']) ? number_format($event['price'], 2) : '0.00' ?> €</p>
+
+                                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                                    <a href="edit_events.php?id=<?= isset($event['ID']) ? $event['ID'] : '' ?>" style="background-color: #f0ad4e; color: white; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;">Edit</a>
+                                    <a href="delete_events.php?id=<?= isset($event['ID']) ? $event['ID'] : '' ?>" style="background-color: #d9534f; color: white; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+                                </div>
                             </div>
-                        </div>
-
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold"><?= htmlspecialchars($event['title']) ?></h5>
-                            <p class="card-text"><?= htmlspecialchars($event['description']) ?></p>
-                            <hr>
-                            <p class="mb-1"><strong>Location:</strong> <?= htmlspecialchars($event['location']) ?></p>
-                            <p><strong>Ticket:</strong> <?= number_format($event['price'], 2) ?> €</p>
-
-                            <a href="edit_events.php?id=<?= $event['id'] ?>" class="btn btn-sm btn-warning">Upraviť</a>
-                            <a href="delete.php?id=<?= $event['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Naozaj chcete zmazať?');">Zmazať</a>
                         </div>
                     </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-12 text-center">
+                    <p>No events found.</p>
                 </div>
-            <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -118,33 +129,7 @@ $events = $stmt->fetchAll();
         margin-bottom: 0.4rem;
     }
 
-    .btn-warning, .btn-danger {
-        border: none;
-        border-radius: 50px;
-        padding: 6px 14px;
-        font-size: 0.85rem;
-        font-weight: 500;
-        margin-right: 6px;
-        transition: background 0.3s ease;
-    }
-
-    .btn-warning {
-        background-color: #f0ad4e;
-        color: white;
-    }
-
-    .btn-warning:hover {
-        background-color: #ec971f;
-    }
-
-    .btn-danger {
-        background-color: #d9534f;
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background-color: #c9302c;
-    }
+    /* Button styling removed since we're using inline styles */
 
     .container {
         max-width: 1200px;
@@ -158,14 +143,16 @@ $events = $stmt->fetchAll();
         justify-content: center;
     }
 
-    .col-md-4 {
-        flex: 0 0 calc(33.333% - 20px);
+    .col-md-6 {
+        flex: 0 0 calc(50% - 20px);
+        max-width: calc(50% - 20px);
         box-sizing: border-box;
     }
 
     @media (max-width: 768px) {
-        .col-md-4 {
+        .col-md-6 {
             flex: 0 0 100%;
+            max-width: 100%;
         }
     }
 </style>

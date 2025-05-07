@@ -37,7 +37,7 @@ class Events extends Database {
     public function getEventById($id)
     {
         try {
-            $sql = "SELECT * FROM events WHERE id = ?";
+            $sql = "SELECT * FROM events WHERE ID = ?";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(1, $id, PDO::PARAM_INT);
             $stmt->execute();
@@ -51,7 +51,7 @@ class Events extends Database {
     public function editovanieEventu($id, array $data)
     {
         try {
-            $sql = "UPDATE events SET title = ?, description = ?, location = ?, date = ?, price = ? WHERE id = ?";
+            $sql = "UPDATE events SET title = ?, description = ?, location = ?, date = ?, price = ? WHERE ID = ?";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(1, $data['title']);
             $stmt->bindParam(2, $data['description']);
@@ -62,6 +62,18 @@ class Events extends Database {
             return $stmt->execute();
         } catch (PDOException $e) {
             echo "Chyba pri upravovaní eventu: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public function vymazanieEventu(int $id): bool
+    {
+        try {
+            $sql = "DELETE FROM events WHERE ID = ?";
+            $stmt = $this->connection->prepare($sql);
+            return $stmt->execute([$id]);
+        } catch (\PDOException $e) {
+            // Chybu si môžeš logovať alebo vypísať počas vývoja
             return false;
         }
     }
