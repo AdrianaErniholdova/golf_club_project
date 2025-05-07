@@ -4,7 +4,6 @@ require_once __DIR__ . '/../../classes/Events.php';
 use events\Events;
 
 $events = new Events();
-$pdo = $events->getConnection();
 
 $error = '';
 $success = '';
@@ -15,13 +14,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $location = $_POST['location'] ?? '';
     $price = $_POST['price'] ?? '';
     $description = $_POST['description'] ?? '';
+    $imagePath = null;
+
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $imageTmp = $_FILES['image']['tmp_name'];
+        $imageName = basename($_FILES['image']['name']);
+        $uploadDir = __DIR__ . '/../../images/';
+        $targetPath = $uploadDir . $imageName;
+
+        if (move_uploaded_file($imageTmp, $targetPath)) {
+            $imagePath = $imageName;
+        } else {
+            $error = 'Nepodarilo sa nahrať obrázok.';
+        }
+    }
 
     if ($title && $date && $location && $price && $description) {
-        $stmt = $pdo->prepare("INSERT INTO events (title, date, location, price, description) VALUES (?, ?, ?, ?, ?)");
-        if ($stmt->execute([$title, $date, $location, $price, $description])) {
+        $data = [
+            'title' => $title,
+            'date' => $date,
+            'location' => $location,
+            'price' => $price,
+            'description' => $description,
+            'image' => $imagePath
+        ];
+
+        try {
+            $events->vytvorenieEventu($data);
             $success = 'Event added successfully!';
-        } else {
-            $error = 'Failed to add event.';
+        } catch (Exception $e) {
+            $error = 'Failed to add event: ' . $e->getMessage();
         }
     } else {
         $error = 'All fields are required.';
@@ -45,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="alert alert-success"><?= $success ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="">
+        <form method="POST" action="" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">Event Title</label>
                 <input type="text" class="form-control" name="title" id="title" required>
@@ -69,6 +91,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="mb-3">
                 <label for="description" class="form-label">Event Description</label>
                 <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Event Image</label>
+                <input type="file" class="form-control" name="image" id="image" accept="image/*">
             </div>
 
             <button type="submit" class="btn btn-primary">Add Event</button>

@@ -22,7 +22,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <div class="container mt-5">
         <h2 class="mb-4">Events</h2>
-        <a href="add_events.php" class="btn btn-primary mb-4">+ Add Event</a>
+        <a href="add_events.php" class="btn btn-primary mb-4" style="display: block; width: 200px; margin: 0 auto; text-align: center;">+ Add Event</a><br>
 
         <div class="row">
             <?php if (!empty($events)): ?>
@@ -30,7 +30,7 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="col-md-6 mb-4">
                         <div class="card shadow rounded overflow-hidden border-0">
                             <div class="position-relative">
-                                <img src="images/event-default.jpg" class="card-img-top" alt="Event Image" style="height: 300px; object-fit: cover;">
+                                <img src="../../images/<?= htmlspecialchars($event['image']) ?>" class="card-img-top" alt="Event Image" style="height: 300px; object-fit: cover;">
                                 <div class="position-absolute bottom-0 start-0 bg-success text-white px-3 py-2">
                                     <?= isset($event['date']) ? htmlspecialchars($event['date']) : 'No date' ?>
                                 </div>
@@ -47,8 +47,8 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <p><strong>Ticket:</strong> <?= isset($event['price']) ? number_format($event['price'], 2) : '0.00' ?> €</p>
 
                                 <div style="margin-top: 15px; display: flex; gap: 10px;">
-                                    <a href="edit_events.php?id=<?= isset($event['ID']) ? $event['ID'] : '' ?>" style="background-color: #f0ad4e; color: white; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;">Edit</a>
-                                    <a href="delete_events.php?id=<?= isset($event['ID']) ? $event['ID'] : '' ?>" style="background-color: #d9534f; color: white; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+                                    <a href="edit_events.php?id=<?= isset($event['ID']) ? $event['ID'] : '' ?>" style="background-color: #3c405a; color: #e07b5e; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;">Edit</a>
+                                    <a href="delete_events.php?id=<?= isset($event['ID']) ? $event['ID'] : '' ?>" style="background-color: #3c405a; color: #e07b5e; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
                                 </div>
                             </div>
                         </div>

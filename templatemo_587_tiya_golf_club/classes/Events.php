@@ -12,22 +12,23 @@ class Events extends Database {
 
     // V Events.php
     public function __construct() {
-        parent::__construct(); // ak treba
-        $this->connect(); // zavolá protected connect()
-        $this->connection = $this->getConnection(); // predpokladá, že getConnection() je public
+        parent::__construct();
+        $this->connect();
+        $this->connection = $this->getConnection();
     }
 
 
     public function vytvorenieEventu(array $data)
     {
         try {
-            $sql = "INSERT INTO events (title, description, location, date, price) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO events (title, description, location, date, price, image) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(1, $data['title']);
             $stmt->bindParam(2, $data['description']);
             $stmt->bindParam(3, $data['location']);
             $stmt->bindParam(4, $data['date']);
             $stmt->bindParam(5, $data['price']);
+            $stmt->bindParam(6, $data['image']);
             $stmt->execute();
         } catch (PDOException $e) {
             echo "Chyba pri vkladaní dát do databázy: " . $e->getMessage();
@@ -51,14 +52,15 @@ class Events extends Database {
     public function editovanieEventu($id, array $data)
     {
         try {
-            $sql = "UPDATE events SET title = ?, description = ?, location = ?, date = ?, price = ? WHERE ID = ?";
+            $sql = "UPDATE events SET title = ?, description = ?, location = ?, date = ?, price = ?, image = ? WHERE ID = ?";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(1, $data['title']);
             $stmt->bindParam(2, $data['description']);
             $stmt->bindParam(3, $data['location']);
             $stmt->bindParam(4, $data['date']);
             $stmt->bindParam(5, $data['price']);
-            $stmt->bindParam(6, $id, PDO::PARAM_INT);
+            $stmt->bindParam(6, $data['image']);
+            $stmt->bindParam(7, $id, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
             echo "Chyba pri upravovaní eventu: " . $e->getMessage();
@@ -73,7 +75,6 @@ class Events extends Database {
             $stmt = $this->connection->prepare($sql);
             return $stmt->execute([$id]);
         } catch (\PDOException $e) {
-            // Chybu si môžeš logovať alebo vypísať počas vývoja
             return false;
         }
     }

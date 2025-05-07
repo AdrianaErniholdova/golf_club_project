@@ -9,14 +9,12 @@ $pdo = $events->getConnection();
 $error = '';
 $success = '';
 
-// Získanie ID eventu z URL
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
     die('Chýbajúce ID eventu.');
 }
 
-// Načítanie existujúceho eventu pre zobrazenie vo formulári
 $currentEvent = $events->getEventById($id);
 if (!$currentEvent) {
     die('Event neexistuje.');
@@ -28,6 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $location = $_POST['location'] ?? '';
     $price = $_POST['price'] ?? '';
     $description = $_POST['description'] ?? '';
+    $imagePath = $currentEvent['image'];
+
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = '../../images/';
+        $fileName = basename($_FILES['image']['name']);
+        $targetPath = $uploadDir . $fileName;
+
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
+            $imagePath = $fileName;
+        }
+    }
 
     if ($title && $date && $location && $price && $description) {
         $update = $events->editovanieEventu($id, [
@@ -35,12 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'date' => $date,
             'location' => $location,
             'price' => $price,
-            'description' => $description
+            'description' => $description,
+            'image' => $imagePath
         ]);
 
         if ($update) {
             $success = 'Event bol úspešne upravený.';
-            // Môžeš aj redirect: header("Location: read_events.php");
+            header('Location: read_events.php');
         } else {
             $error = 'Nepodarilo sa upraviť event.';
         }
@@ -67,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="alert alert-success"><?= $success ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="">
+        <form method="POST" action="" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="title" class="form-label">Event Title</label>
                 <input type="text" class="form-control" name="title" id="title" required>
@@ -91,6 +101,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="mb-3">
                 <label for="description" class="form-label">Event Description</label>
                 <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Event Image</label>
+                <input type="file" class="form-control" name="image" id="image" accept="image/*">
             </div>
 
             <button type="submit" class="btn btn-primary">Edit</button>
