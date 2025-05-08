@@ -1,4 +1,9 @@
 <?php
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once __DIR__ . '/classes/Database.php';
 require_once __DIR__ . '/classes/Events.php';
 
@@ -11,7 +16,22 @@ $pdo = $database->getConnection();
 
 $stmt = $pdo->query("SELECT * FROM events ORDER BY date DESC");
 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$userTickets = [];
+
+if (isset($_SESSION['user_id'])) {
+    $stmt = $pdo->prepare("
+        SELECT e.title, e.date, e.location 
+        FROM event_tickets et
+        JOIN events e ON et.event_id = e.id
+        WHERE et.user_id = ?
+        ORDER BY e.date DESC
+    ");
+    $stmt->execute([$_SESSION['user_id']]);
+    $userTickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
+
 <!doctype html>
 <html lang="en">
 <!--head-->
@@ -53,10 +73,26 @@ if(!include($file_path)) {
                 <svg viewBox="0 0 1962 178" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><path fill="#ffffff" d="M 0 114 C 118.5 114 118.5 167 237 167 L 237 167 L 237 0 L 0 0 Z" stroke-width="0"></path> <path fill="#ffffff" d="M 236 167 C 373 167 373 128 510 128 L 510 128 L 510 0 L 236 0 Z" stroke-width="0"></path> <path fill="#ffffff" d="M 509 128 C 607 128 607 153 705 153 L 705 153 L 705 0 L 509 0 Z" stroke-width="0"></path><path fill="#ffffff" d="M 704 153 C 812 153 812 113 920 113 L 920 113 L 920 0 L 704 0 Z" stroke-width="0"></path><path fill="#ffffff" d="M 919 113 C 1048.5 113 1048.5 148 1178 148 L 1178 148 L 1178 0 L 919 0 Z" stroke-width="0"></path><path fill="#ffffff" d="M 1177 148 C 1359.5 148 1359.5 129 1542 129 L 1542 129 L 1542 0 L 1177 0 Z" stroke-width="0"></path><path fill="#ffffff" d="M 1541 129 C 1751.5 129 1751.5 138 1962 138 L 1962 138 L 1962 0 L 1541 0 Z" stroke-width="0"></path></svg>
             </section>
 
-
             <section class="events-section section-padding" id="section_2">
                 <div class="container">
                     <div class="row">
+
+                        <?php if (!empty($userTickets)): ?>
+                            <div class="col-lg-12 col-12">
+                                <h3 class="mb-3">Your Tickets</h3>
+                                <ul class="list-group mb-5">
+                                    <?php foreach ($userTickets as $ticket): ?>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <strong><?= htmlspecialchars($ticket['title']) ?></strong><br>
+                                                Date: <?= htmlspecialchars($ticket['date']) ?><br>
+                                                Location: <?= htmlspecialchars($ticket['location']) ?>
+                                            </div>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            </div>
+                        <?php endif; ?>
 
                         <div class="col-lg-12 col-12">
                             <h2 class="mb-lg-5 mb-4">Upcoming events</h2>
@@ -73,15 +109,18 @@ if(!include($file_path)) {
                                 </div>
 
                                 <div class="custom-btn-wrap">
-                                    <?php
-                                    $isUserLoggedIn = isset($_SESSION['rola']) && $_SESSION['rola'] === 'pouzivatel';
-                                    ?>
-                                    <a href="<?php echo $isUserLoggedIn ? 'php' : '#'; ?>"
-                                       class="btn custom-btn"
-                                       onclick="<?php if (!$isUserLoggedIn) echo "alert('Must be logged in to proceed'); return false;"; ?>">
-                                        Buy Ticket
-                                    </a>
+                                    <?php if (isset($_SESSION['rola']) && $_SESSION['rola'] === 'pouzivatel'): ?>
+                                        <form action="user/event_tickets.php" method="POST">
+                                            <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
+                                            <button type="submit" class="btn custom-btn">Buy Ticket</button>
+                                        </form>
+                                    <?php else: ?>
+                                        <a href="#" class="btn custom-btn" onclick="alert('Must be logged in to proceed'); return false;">
+                                            Buy Ticket
+                                        </a>
+                                    <?php endif; ?>
                                 </div>
+
                             </div>
 
                             <div class="custom-block-info">

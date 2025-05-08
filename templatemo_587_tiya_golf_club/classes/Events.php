@@ -31,20 +31,20 @@ class Events extends Database {
             $stmt->bindParam(6, $data['image']);
             $stmt->execute();
         } catch (PDOException $e) {
-            echo "Chyba pri vkladaní dát do databázy: " . $e->getMessage();
+            echo "Error inserting data into database: " . $e->getMessage();
         }
     }
 
     public function getEventById($id)
     {
         try {
-            $sql = "SELECT * FROM events WHERE ID = ?";
+            $sql = "SELECT * FROM events WHERE id = ?";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(1, $id, PDO::PARAM_INT);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Chyba pri načítaní eventu: " . $e->getMessage();
+            echo "Error loading event: " . $e->getMessage();
             return null;
         }
     }
@@ -52,7 +52,7 @@ class Events extends Database {
     public function editovanieEventu($id, array $data)
     {
         try {
-            $sql = "UPDATE events SET title = ?, description = ?, location = ?, date = ?, price = ?, image = ? WHERE ID = ?";
+            $sql = "UPDATE events SET title = ?, description = ?, location = ?, date = ?, price = ?, image = ? WHERE id = ?";
             $stmt = $this->connection->prepare($sql);
             $stmt->bindParam(1, $data['title']);
             $stmt->bindParam(2, $data['description']);
@@ -63,7 +63,7 @@ class Events extends Database {
             $stmt->bindParam(7, $id, PDO::PARAM_INT);
             return $stmt->execute();
         } catch (PDOException $e) {
-            echo "Chyba pri upravovaní eventu: " . $e->getMessage();
+            echo "Error in editing event: " . $e->getMessage();
             return false;
         }
     }
@@ -71,7 +71,7 @@ class Events extends Database {
     public function vymazanieEventu(int $id): bool
     {
         try {
-            $sql = "DELETE FROM events WHERE ID = ?";
+            $sql = "DELETE FROM events WHERE id = ?";
             $stmt = $this->connection->prepare($sql);
             return $stmt->execute([$id]);
         } catch (\PDOException $e) {

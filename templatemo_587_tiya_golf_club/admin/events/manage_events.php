@@ -5,12 +5,10 @@ require_once __DIR__ . '/../../classes/Events.php';
 use database\Database;
 use events\Events;
 
-// Create Events instance which will handle database operations
 $eventsHandler = new Events();
 $database = new Database();
 $pdo = $database->getConnection();
 
-// Get all events using the database connection
 $stmt = $pdo->query("SELECT * FROM events ORDER BY date DESC");
 $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -44,8 +42,8 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <p><strong>Ticket:</strong> <?= isset($event['price']) ? number_format($event['price'], 2) : '0.00' ?> €</p>
 
                                 <div style="margin-top: 15px; display: flex; gap: 10px;">
-                                    <a href="edit_events.php?id=<?= isset($event['ID']) ? $event['ID'] : '' ?>" style="background-color: #3c405a; color: #e07b5e; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;">Edit</a>
-                                    <a href="delete_events.php?id=<?= isset($event['ID']) ? $event['ID'] : '' ?>" style="background-color: #3c405a; color: #e07b5e; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+                                    <a href="edit_events.php?id=<?= isset($event['id']) ? $event['id'] : '' ?>" style="background-color: #3c405a; color: #e07b5e; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;">Edit</a>
+                                    <a href="delete_events.php?id=<?= isset($event['id']) ? $event['id'] : '' ?>" style="background-color: #3c405a; color: #e07b5e; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
                                 </div>
                             </div>
                         </div>

@@ -12,12 +12,12 @@ $success = '';
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    die('Chýbajúce ID eventu.');
+    die('Missing event id.');
 }
 
 $currentEvent = $events->getEventById($id);
 if (!$currentEvent) {
-    die('Event neexistuje.');
+    die('Event does not exist.');
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -49,13 +49,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         if ($update) {
-            $success = 'Event bol úspešne upravený.';
+            $success = 'Event was successfully updated.';
             header('Location: manage_events.php');
         } else {
-            $error = 'Nepodarilo sa upraviť event.';
+            $error = 'Failed to update event.';
         }
     } else {
-        $error = 'Všetky polia sú povinné.';
+        $error = 'All fields are required.';
     }
 }
 ?>

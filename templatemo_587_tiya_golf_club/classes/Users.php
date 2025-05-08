@@ -35,7 +35,7 @@ class Users extends Database {
             $statement->bindParam(4, $this->rola);
             $statement->execute();
         } catch (Exception $e) {
-            echo "Chyba pri vkladaní dát do databázy: " . $e->getMessage();
+            echo "Error inserting into database: " . $e->getMessage();
         } finally {
             $this->connection = null;
         }
@@ -49,11 +49,11 @@ class Users extends Database {
         $statement->execute();
         $user = $statement->fetch();
         if (!$user) {
-            throw new Exception("Používateľ neexistuje.");
+            throw new Exception("User does not exist.");
         }
 
         if (!password_verify($password, $user['heslo'])) {
-            throw new Exception("Nesprávne heslo.");
+            throw new Exception("Incorrect password.");
         }
 
         return $user;

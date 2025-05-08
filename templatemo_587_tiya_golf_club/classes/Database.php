@@ -38,7 +38,7 @@ class Database
             );
         } catch (PDOException $e) {
 
-            throw new Exception('Pripojenie zlyhalo: ' . $e->getMessage());
+            throw new Exception('Connection failed: ' . $e->getMessage());
         }
     }
 

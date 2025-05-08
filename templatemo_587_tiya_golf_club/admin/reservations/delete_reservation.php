@@ -12,8 +12,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         header('Location: manage_reservations.php');
         exit();
     } else {
-        echo "Chyba pri mazaní eventu.";
+        echo "Failed to delete reservation.";
     }
 } else {
-    echo "Neplatné ID.";
+    echo "Invalid ID.";
 }

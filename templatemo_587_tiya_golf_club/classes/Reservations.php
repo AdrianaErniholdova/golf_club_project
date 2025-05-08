@@ -20,7 +20,7 @@ class Reservations extends Database
     public function vytvorenieRezervacie($data)
     {
         try {
-            $sql = "INSERT INTO reservations (full_name, email, reservation_type, date, number_of_people, price, comment, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO reservations (full_name, email, reservation_type, date, number_of_people, price, comment, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->connection->prepare($sql);
             $stmt->execute([
                 $data['full_name'],
@@ -30,10 +30,11 @@ class Reservations extends Database
                 $data['number_of_people'],
                 $data['price'],
                 $data['comment'],
-                $data['status'] ?? 'pending'
+                $data['status'] ?? 'pending',
+                $data['user_id']
             ]);
         } catch (Exception $e) {
-            throw new Exception("Chyba pri vytváraní rezervácie: " . $e->getMessage());
+            throw new Exception("Error in creating reservation: " . $e->getMessage());
         }
     }
 
@@ -72,12 +73,14 @@ class Reservations extends Database
         return $stmt->execute([$id]);
     }
 
-    public function getReservationsByUser($email)
-    {
-        $sql = "SELECT * FROM reservations WHERE email = ? ORDER BY date DESC";
-        $stmt = $this->connection->prepare($sql);
-        $stmt->execute([$email]);
-        return $stmt->fetchAll();
+    public function getReservationsByUserId($userId) {
+        $db = new \database\Database();
+        $pdo = $db->getConnection();
+
+        $stmt = $pdo->prepare("SELECT * FROM reservations WHERE user_id = ?");
+        $stmt->execute([$userId]);
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 }

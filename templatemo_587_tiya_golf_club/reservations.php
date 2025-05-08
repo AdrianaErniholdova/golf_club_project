@@ -8,6 +8,22 @@ use reservations\Reservations;
 $database = new Database();
 $pdo = $database->getConnection();
 
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$userReservations = [];
+
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+    $reservations = new Reservations();
+    $userReservations = $reservations->getReservationsByUserId($userId);
+}
+
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+}
+
 // Process form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate required fields
@@ -42,16 +58,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'number_of_people' => $_POST['number_of_people'],
             'price' => $_POST['price'],
             'comment' => $_POST['comment'] ?? '',
-            'status' => 'pending'
+            'status' => 'pending',
+            'user_id' => $_SESSION['user_id']
         ];
 
         try {
             $reservations = new Reservations();
             $reservations->vytvorenieRezervacie($data);
-            $success = "Rezervácia bola úspešne vytvorená";
+            $success = "Reservation was successfully created.";
             // tu bude see reservations
         } catch (Exception $e) {
-            $errors[] = "Chyba: " . $e->getMessage();
+            $errors[] = "Error: " . $e->getMessage();
         }
     }
 }
@@ -99,6 +116,35 @@ if(!include($file_path)) {
 
     <section class="events-section section-padding" id="section_2">
         <div class="container mt-5">
+
+            <?php if (!empty($userReservations)): ?>
+                <div class="mb-5">
+                    <h3>Your Reservations</h3>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>People</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($userReservations as $reservation): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($reservation['date']); ?></td>
+                                <td><?php echo htmlspecialchars($reservation['reservation_type']); ?></td>
+                                <td><?php echo htmlspecialchars($reservation['number_of_people']); ?></td>
+                                <td><?php echo htmlspecialchars($reservation['price']); ?> €</td>
+                                <td><?php echo htmlspecialchars($reservation['status']); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+
             <h2 class="mb-4 text-center">Make a Reservation</h2>
 
             <?php if (!empty($errors)): ?>

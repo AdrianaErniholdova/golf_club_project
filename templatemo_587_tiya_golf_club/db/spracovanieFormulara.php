@@ -9,7 +9,7 @@ $email = $_POST["email"];
 $message = $_POST["message"];
 
 if (empty($name) || empty($email) || empty($message)) {
-    die('Chyba: Všetky polia sú povinné!');
+    die('All fields are required!');
 }
 
 $db = (new Database())->getConnection();
@@ -28,6 +28,6 @@ if ($ulozene) {
     exit;
 } else {
     http_response_code(500);
-    die('Chyba pri odosielaní správy do databázy!');
+    die('Error sending message to database!');
 }
 ?>

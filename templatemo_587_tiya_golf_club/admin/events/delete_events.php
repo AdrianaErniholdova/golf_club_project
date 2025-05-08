@@ -12,8 +12,8 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         header('Location: manage_events.php');
         exit();
     } else {
-        echo "Chyba pri mazaní eventu.";
+        echo "Failed to delete event.";
     }
 } else {
-    echo "Neplatné ID.";
+    echo "Unknown ID.";
 }

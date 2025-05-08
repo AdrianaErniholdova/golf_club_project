@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $userObj->login($loginOrEmail, $password);
 
         // Nastavenie session
-        $_SESSION['user_id'] = $user['ID'];
+        $_SESSION['user_id'] = $user['id'];
         $_SESSION['login'] = $user['login'];
         $_SESSION['rola'] = $user['rola'];
 
@@ -25,6 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         exit;
     } catch (Exception $e) {
-        echo 'Chyba pri prihlasovaní: ' . $e->getMessage();
+        echo 'Login error: ' . $e->getMessage();
     }
 }

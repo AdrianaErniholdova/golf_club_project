@@ -10,7 +10,7 @@ $password = $_POST['password'];
 
 // Overenie údajov
 if (empty($username) || empty($email) || empty($password)) {
-    die('Chyba: Všetky polia sú povinné!');
+    die('All fields are required!');
 }
 
 // Uloženie správy do databázy
