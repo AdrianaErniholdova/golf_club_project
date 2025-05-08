@@ -64,7 +64,7 @@ if(!include($file_path)) {
                         <div class="col-lg-6 col-12 mb-5 mb-lg-0"> <br> <br>
                             <div class="custom-block-image-wrap">
                                 <a href="">
-                                    <img src="images/event1.jpg" class="custom-block-image img-fluid" alt="">
+                                    <img src="../../images/<?= htmlspecialchars($event['image']) ?>" class="custom-block-image img-fluid" alt="Event Image">
 
                                     <i class="custom-block-icon bi-link"></i>
                                 </a>

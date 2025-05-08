@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('classes/Users.php');
+require_once('../classes/Users.php');
 
 use users\Users;
 
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user->login($loginOrEmail, $password);
 
         if ($_SESSION['rola'] === 'admin') {
-            header('Location: admin/menu.php');
+            header('Location: ../admin/menu.php');
         } else {
             header('Location: ' . $redirectUrl);
         }

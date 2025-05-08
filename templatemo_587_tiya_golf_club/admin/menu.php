@@ -52,8 +52,8 @@
 <body>
 <div class="admin-container">
     <h1>Admin Menu</h1>
-    <a href="events/read_events.php" class="admin-button">Manage Events</a>
-    <a href="manage-reservations.php" class="admin-button">Manage Reservations</a>
+    <a href="events/manage_events.php" class="admin-button">Manage Events</a>
+    <a href="reservations/manage_reservations.php" class="admin-button">Manage Reservations</a>
     <a href="../index.php" class="admin-button">Back to Homepage</a>
 </div>
 </body>

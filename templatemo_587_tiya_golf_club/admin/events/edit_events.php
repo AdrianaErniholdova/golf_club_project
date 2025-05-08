@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($update) {
             $success = 'Event bol úspešne upravený.';
-            header('Location: read_events.php');
+            header('Location: manage_events.php');
         } else {
             $error = 'Nepodarilo sa upraviť event.';
         }

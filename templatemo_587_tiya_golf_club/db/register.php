@@ -19,6 +19,7 @@ try {
     $user->register($username, $email, $password);
     return header('Location: ../index.php');
 } catch (Exception $e) {
-    http_response_code(404);
-    die('Chyba pri odosielaní správy do databázy!');
+    die($e->getMessage());
 }
+
+

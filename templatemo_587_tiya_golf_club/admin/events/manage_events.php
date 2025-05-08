@@ -31,18 +31,15 @@ $events = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="card shadow rounded overflow-hidden border-0">
                             <div class="position-relative">
                                 <img src="../../images/<?= htmlspecialchars($event['image']) ?>" class="card-img-top" alt="Event Image" style="height: 300px; object-fit: cover;">
-                                <div class="position-absolute bottom-0 start-0 bg-success text-white px-3 py-2">
-                                    <?= isset($event['date']) ? htmlspecialchars($event['date']) : 'No date' ?>
-                                </div>
-                                <div class="position-absolute bottom-0 end-0 bg-warning text-white px-3 py-2 fw-bold">
-                                    Buy Ticket
-                                </div>
                             </div>
 
                             <div class="card-body">
                                 <h5 class="card-title fw-bold"><?= isset($event['title']) ? htmlspecialchars($event['title']) : 'No title' ?></h5>
                                 <p class="card-text"><?= isset($event['description']) ? htmlspecialchars($event['description']) : 'No description' ?></p>
                                 <hr>
+                                <div class="position-absolute bottom-0 start-0 bg-success text-white px-3 py-2">
+                                    <?= isset($event['date']) ? htmlspecialchars($event['date']) : 'No date' ?>
+                                </div>
                                 <p class="mb-1"><strong>Location:</strong> <?= isset($event['location']) ? htmlspecialchars($event['location']) : 'No location' ?></p>
                                 <p><strong>Ticket:</strong> <?= isset($event['price']) ? number_format($event['price'], 2) : '0.00' ?> €</p>
 

@@ -35,7 +35,7 @@ session_start();
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_4">Events</a>
+                    <a class="nav-link click-scroll" href="reservations.php">Reservations</a>
                 </li>
 
                 <li class="nav-item">
@@ -65,7 +65,7 @@ session_start();
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column">
-        <form class="custom-form member-login-form" action="login.php" method="post" role="form">
+        <form class="custom-form member-login-form" action="db/login.php" method="post" role="form">
             <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
             <div class="member-login-form-body">

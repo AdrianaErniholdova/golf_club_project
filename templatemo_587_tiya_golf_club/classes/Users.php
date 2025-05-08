@@ -24,7 +24,7 @@ class Users extends Database {
             $statement->execute();
             $existingUser = $statement->fetch();
             if ($existingUser) {
-                throw new Exception("Používateľ už existuje.");
+                throw new \Exception("User already exists");
             }
 
             $sql = "INSERT INTO users (login, email, heslo, rola) VALUES (?, ?, ?, ?)";

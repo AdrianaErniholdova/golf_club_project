@@ -9,7 +9,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id = (int)$_GET['id'];
 
     if ($eventsHandler->vymazanieEventu($id)) {
-        header('Location: read_events.php'); // uprav podľa názvu tvojej stránky
+        header('Location: manage_events.php');
         exit();
     } else {
         echo "Chyba pri mazaní eventu.";
