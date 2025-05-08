@@ -5,11 +5,12 @@ require_once __DIR__ . '/classes/Events.php';
 use database\Database;
 use events\Events;
 
+$eventsHandler = new Events();
 $database = new Database();
 $pdo = $database->getConnection();
 
 $stmt = $pdo->query("SELECT * FROM events ORDER BY date DESC");
-$events = $stmt->fetchAll();
+$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!doctype html>
 <html lang="en">
@@ -64,9 +65,7 @@ if(!include($file_path)) {
                         <div class="col-lg-6 col-12 mb-5 mb-lg-0"> <br> <br>
                             <div class="custom-block-image-wrap">
                                 <a href="">
-                                    <img src="../../images/<?= htmlspecialchars($event['image']) ?>" class="custom-block-image img-fluid" alt="Event Image">
-
-                                    <i class="custom-block-icon bi-link"></i>
+                                    <img src="images/<?= htmlspecialchars($event['image']) ?>" class="custom-block-image img-fluid" alt="Event Image">
                                 </a>
 
                                 <div class="custom-block-date-wrap">

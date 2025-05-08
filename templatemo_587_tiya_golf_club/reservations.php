@@ -99,7 +99,7 @@ if(!include($file_path)) {
 
     <section class="events-section section-padding" id="section_2">
         <div class="container mt-5">
-            <h2 class="mb-4 text-center">Create Reservation</h2>
+            <h2 class="mb-4 text-center">Make a Reservation</h2>
 
             <?php if (!empty($errors)): ?>
                 <div class="alert alert-danger">

@@ -43,7 +43,7 @@ session_start();
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link click-scroll" href="event-listing.php">Event Listing</a>
+                    <a class="nav-link click-scroll" href="events.php">Events</a>
                 </li>
             </ul>
 
@@ -86,14 +86,4 @@ session_start();
                 </div>
             </div>
         </form>
-
-        <div class="mt-auto mb-5">
-            <p>
-                <strong class="text-white me-3">Any Questions?</strong>
-
-                <a href="tel: 010-020-0340" class="contact-link">
-                    010-020-0340
-                </a>
-            </p>
-        </div>
     </div>

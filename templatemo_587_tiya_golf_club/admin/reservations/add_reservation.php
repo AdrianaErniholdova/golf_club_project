@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         $reservationHandler->vytvorenieRezervacie($data);
-        header("Location: manage_reservations.php"); 
+        header("Location: manage_reservations.php");
         exit;
     } catch (Exception $e) {
         $error = $e->getMessage();
