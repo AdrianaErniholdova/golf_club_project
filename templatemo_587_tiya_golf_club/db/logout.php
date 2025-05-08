@@ -1,9 +1,6 @@
 <?php
-
-use users\Users;
-
-define('__ROOT__', dirname(dirname(__FILE__)));
-include_once ('../classes/Users.php');
-$users = new Users();
-$users->logout();
-?>
+session_start();
+session_unset();
+session_destroy();
+header('Location: ../index.php');
+exit;

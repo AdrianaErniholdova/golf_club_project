@@ -182,7 +182,7 @@ if(!include($file_path)) {
                                 </button>
                             <?php else: ?>
                                 <button type="button" class="btn btn-primary"
-                                        onclick="alert('Musíte byť prihlásený, aby ste mohli vytvoriť rezerváciu.');"
+                                        onclick="alert('You must be logged in to proceed.');"
                                         style="background-color: #3c405a; border-color: #3c405a; border-radius: 50px; padding: 10px 30px;">
                                     Submit reservation
                                 </button>

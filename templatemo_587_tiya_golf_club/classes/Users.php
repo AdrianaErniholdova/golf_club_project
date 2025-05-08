@@ -56,27 +56,14 @@ class Users extends Database {
             throw new Exception("Nesprávne heslo.");
         }
 
-        session_start();
-        $_SESSION['user_id'] = $user['ID'];
-        $_SESSION['login'] = $user['login'];
-        $_SESSION['rola'] = $user['rola'];
+        return $user;
     }
 
-
-    public function logout() {
-        session_start();
-        session_unset();
-        session_destroy();
-        header('Location: ../index.php');
-        exit;
-    }
-
-    public function isAdmin() {
+    /*public function isAdmin() {
         session_start();
         if (isset($_SESSION['rola']) && isset($_SESSION['user_id'])) {
             return $_SESSION['rola'] === 'admin';
         }
         return false;
-    }
-
+    }*/
 }

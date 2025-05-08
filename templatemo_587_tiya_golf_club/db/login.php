@@ -10,8 +10,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $redirectUrl = $_POST['redirect'] ?? 'index.php';
 
     try {
-        $user = new Users();
-        $user->login($loginOrEmail, $password);
+        $userObj = new Users();
+        $user = $userObj->login($loginOrEmail, $password);
+
+        // Nastavenie session
+        $_SESSION['user_id'] = $user['ID'];
+        $_SESSION['login'] = $user['login'];
+        $_SESSION['rola'] = $user['rola'];
 
         if ($_SESSION['rola'] === 'admin') {
             header('Location: ../admin/menu.php');

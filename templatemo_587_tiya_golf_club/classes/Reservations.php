@@ -71,4 +71,13 @@ class Reservations extends Database
         $stmt = $this->connection->prepare($sql);
         return $stmt->execute([$id]);
     }
+
+    public function getReservationsByUser($email)
+    {
+        $sql = "SELECT * FROM reservations WHERE email = ? ORDER BY date DESC";
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute([$email]);
+        return $stmt->fetchAll();
+    }
+
 }
