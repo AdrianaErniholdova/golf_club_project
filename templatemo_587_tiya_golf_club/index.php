@@ -304,6 +304,8 @@ if(!include($file_path)) {
 
             <section class="contact-section section-padding" id="section_5">
                 <div class="container">
+                    <div class="reservations-button">
+                        <a href="reservations.php" class="btn custom-btn" style="background-color:darkred ">Make Your Reservation Here</a><br><br><br><br>
                     <div class="row">
 
                         <div class="col-lg-5 col-12">

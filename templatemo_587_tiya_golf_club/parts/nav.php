@@ -1,9 +1,9 @@
 <?php
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+include_once $_SERVER['DOCUMENT_ROOT'] . '/golf_club_project/templatemo_587_tiya_golf_club/config/functions.php';
 ?>
 
 <nav class="navbar navbar-expand-lg custom-navbar">
@@ -11,13 +11,21 @@ if (session_status() === PHP_SESSION_NONE) {
         <a class="navbar-brand d-flex align-items-center" href="index.php">
             <img src="images/logo.png" class="navbar-brand-image img-fluid" alt="Tiya Golf Club">
             <span class="navbar-brand-text">
-                            Tiya
-                            <small>Golf Club</small>
-                        </span>
+                Tiya
+                <small>Golf Club</small>
+            </span>
         </a>
 
         <div class="d-lg-none ms-auto me-3">
-            <a class="btn custom-btn custom-border-btn" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">Member Login</a>
+            <?php if (isset($_SESSION['login'])): ?>
+                <a class="btn custom-btn custom-border-btn" href="db/logout.php">
+                    Logout (<?= htmlspecialchars($_SESSION['rola']) ?>)
+                </a>
+            <?php else: ?>
+                <a class="btn custom-btn custom-border-btn" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                    Member Login
+                </a>
+            <?php endif; ?>
         </div>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,42 +34,24 @@ if (session_status() === PHP_SESSION_NONE) {
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-lg-auto">
-                <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_1">Home</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_2">About</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_3">Membership</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link click-scroll" href="reservations.php">Reservations</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link click-scroll" href="#section_5">Contact Us</a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link click-scroll" href="events.php">Events</a>
-                </li>
+                <?php printNavbarItems(); ?>
             </ul>
 
             <div class="d-none d-lg-block ms-lg-3">
-    <?php if (isset($_SESSION['login'])): ?>
-        <a class="btn custom-btn custom-border-btn" href="db/logout.php">Logout (<?= htmlspecialchars($_SESSION['rola']) ?>)</a>
-    <?php else: ?>
-        <a class="btn custom-btn custom-border-btn" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">Member Login</a>
-    <?php endif; ?>
-</div>
-
+                <?php if (isset($_SESSION['login'])): ?>
+                    <a class="btn custom-btn custom-border-btn" href="db/logout.php">
+                        Logout (<?= htmlspecialchars($_SESSION['rola']) ?>)
+                    </a>
+                <?php else: ?>
+                    <a class="btn custom-btn custom-border-btn" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                        Member Login
+                    </a>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
 </nav>
+
 <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Member Login</h5>
