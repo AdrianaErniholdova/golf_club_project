@@ -20,34 +20,20 @@ if (isset($_SESSION['user_id'])) {
     $userReservations = $reservations->getReservationsByUserId($userId);
 }
 
-if (isset($_SESSION['user_id'])) {
-    $userId = $_SESSION['user_id'];
+$success = null;
+if (isset($_SESSION['success_message'])) {
+    $success = $_SESSION['success_message'];
+    unset($_SESSION['success_message']);
 }
 
-// Process form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate required fields
     $errors = [];
 
-    if (empty($_POST['full_name'])) {
-        $errors[] = "Required";
-    }
-
-    if (empty($_POST['email'])) {
-        $errors[] = "Required";
-    }
-
-    if (empty($_POST['reservation_type'])) {
-        $errors[] = "Required";
-    }
-
-    if (empty($_POST['date'])) {
-        $errors[] = "Required";
-    }
-
-    if (empty($_POST['number_of_people']) || $_POST['number_of_people'] < 1) {
-        $errors[] = "Required";
-    }
+    if (empty($_POST['full_name'])) $errors[] = "Required";
+    if (empty($_POST['email'])) $errors[] = "Required";
+    if (empty($_POST['reservation_type'])) $errors[] = "Required";
+    if (empty($_POST['date'])) $errors[] = "Required";
+    if (empty($_POST['number_of_people']) || $_POST['number_of_people'] < 1) $errors[] = "Required";
 
     if (empty($errors)) {
         $data = [
@@ -56,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'reservation_type' => $_POST['reservation_type'],
             'date' => $_POST['date'],
             'number_of_people' => $_POST['number_of_people'],
-            'price' => $_POST['price'],
             'comment' => $_POST['comment'] ?? '',
             'status' => 'pending',
             'user_id' => $_SESSION['user_id']
@@ -65,8 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $reservations = new Reservations();
             $reservations->vytvorenieRezervacie($data);
-            $success = "Reservation was successfully created.";
-            // tu bude see reservations
+
+            $_SESSION['success_message'] = "Reservation was successfully created.";
+            header("Location: " . $_SERVER['PHP_SELF']);
+            exit;
         } catch (Exception $e) {
             $errors[] = "Error: " . $e->getMessage();
         }
@@ -117,6 +104,12 @@ if(!include($file_path)) {
     <section class="events-section section-padding" id="section_2">
         <div class="container mt-5">
 
+            <?php if (isset($success)): ?>
+                <div class="alert alert-success">
+                    <?php echo htmlspecialchars($success); ?>
+                </div>
+            <?php endif; ?>
+
             <?php if (!empty($userReservations)): ?>
                 <div class="mb-5">
                     <h3>Your Reservations</h3>
@@ -138,6 +131,8 @@ if(!include($file_path)) {
                                 <td><?php echo htmlspecialchars($reservation['number_of_people']); ?></td>
                                 <td><?php echo htmlspecialchars($reservation['price']); ?> €</td>
                                 <td><?php echo htmlspecialchars($reservation['status']); ?></td>
+                                <td>
+                                    <a href="admin/reservations/delete_reservation.php?id=<?php echo $reservation['id']; ?>" style="color: #e07b5e; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;" onclick="return confirm('Are you sure you want to cancel this reservation?');">Cancel Reservation</a>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
@@ -154,12 +149,6 @@ if(!include($file_path)) {
                             <li><?php echo htmlspecialchars($error); ?></li>
                         <?php endforeach; ?>
                     </ul>
-                </div>
-            <?php endif; ?>
-
-            <?php if (isset($success)): ?>
-                <div class="alert alert-success">
-                    <?php echo htmlspecialchars($success); ?>
                 </div>
             <?php endif; ?>
 
@@ -206,15 +195,9 @@ if(!include($file_path)) {
                             </div>
 
                             <div class="col-md-6">
-                                <label for="price" class="form-label">Price:</label>
-                                <input type="number" class="form-control" name="price" id="price"
-                                       value="<?php echo isset($_POST['price']) ? htmlspecialchars($_POST['price']) : ''; ?>">
+                                <label for="comment" class="form-label">Comment:</label>
+                                <textarea class="form-control" name="comment" id="comment" rows="1"><?php echo isset($_POST['comment']) ? htmlspecialchars($_POST['comment']) : ''; ?></textarea>
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="comment" class="form-label">Comment:</label>
-                            <textarea class="form-control" name="comment" id="comment" rows="3"><?php echo isset($_POST['comment']) ? htmlspecialchars($_POST['comment']) : ''; ?></textarea>
                         </div>
 
                         <div class="text-center mt-4">

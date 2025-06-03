@@ -40,7 +40,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/golf_club_project/templatemo_587_tiya
             <div class="d-none d-lg-block ms-lg-3">
                 <?php if (isset($_SESSION['login'])): ?>
                     <a class="btn custom-btn custom-border-btn" href="db/logout.php">
-                        Logout (<?= htmlspecialchars($_SESSION['rola']) ?>)
+                        Logout (<?= htmlspecialchars($_SESSION['login']) ?>)
                     </a>
                 <?php else: ?>
                     <a class="btn custom-btn custom-border-btn" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">

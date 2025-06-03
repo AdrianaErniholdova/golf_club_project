@@ -23,7 +23,9 @@ $reservations = $reservationsHandler->getAllReservations();
                         <div class="card shadow rounded overflow-hidden border-0">
 
                             <div class="card-body">
-                                <h5 class="card-title fw-bold"><?= htmlspecialchars($res['full_name']) ?></h5>
+                                <p class="card-text mb-1"><strong>Reservation Number:</strong> <?= htmlspecialchars($res['id']) ?></p>
+                                <p class="card-text mb-1"><strong>User ID:</strong> <?= htmlspecialchars($res['user_id']) ?></p>
+                                <p class="card-text mb-1"><strong>Name:</strong> <?= htmlspecialchars($res['full_name']) ?></p>
                                 <p class="card-text mb-1"><strong>Email:</strong> <?= htmlspecialchars($res['email']) ?></p>
                                 <p class="card-text mb-1"><strong>Date and Time:</strong> <?= htmlspecialchars($res['date']) ?></p>
                                 <p class="card-text mb-1"><strong>Type:</strong> <?= htmlspecialchars($res['reservation_type']) ?></p>

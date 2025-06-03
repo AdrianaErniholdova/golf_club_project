@@ -13,7 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userObj = new Users();
         $user = $userObj->login($loginOrEmail, $password);
 
-        // Nastavenie session
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['login'] = $user['login'];
         $_SESSION['rola'] = $user['rola'];

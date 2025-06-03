@@ -100,9 +100,7 @@ if(!include($file_path)) {
                         <?php foreach ($events as $event): ?>
                         <div class="col-lg-6 col-12 mb-5 mb-lg-0"> <br> <br>
                             <div class="custom-block-image-wrap">
-                                <a href="">
-                                    <img src="images/<?= htmlspecialchars($event['image']) ?>" class="custom-block-image img-fluid" alt="Event Image">
-                                </a>
+                                <img src="images/<?= htmlspecialchars($event['image']) ?>" class="custom-block-image img-fluid" alt="Event Image">
 
                                 <div class="custom-block-date-wrap">
                                     <strong class="text-white"><?= $event['date'] ?></strong>

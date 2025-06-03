@@ -28,7 +28,7 @@ class Reservations extends Database
                 $data['reservation_type'],
                 $data['date'],
                 $data['number_of_people'],
-                $data['price'],
+                $data['price'] = $this->vypocitajCenu($data['reservation_type'], $data['number_of_people']),
                 $data['comment'],
                 $data['status'] ?? 'pending',
                 $data['user_id']
@@ -54,9 +54,11 @@ class Reservations extends Database
 
     public function editovanieRezervacie($id, $data)
     {
-        $sql = "UPDATE reservations SET date = ?, number_of_people = ?, reservation_type = ?, comment = ?, status = ? WHERE id = ?";
+        $sql = "UPDATE reservations SET full_name = ?, email = ?, date = ?, number_of_people = ?, reservation_type = ?, comment = ?, status = ? WHERE id = ?";
         $stmt = $this->connection->prepare($sql);
         return $stmt->execute([
+            $data['full_name'],
+            $data['email'],
             $data['date'],
             $data['number_of_people'],
             $data['reservation_type'],
@@ -82,5 +84,18 @@ class Reservations extends Database
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function vypocitajCenu(string $typ, int $pocetOsob): float
+    {
+        $zakladneCeny = [
+            'Practice' => 10.0,
+            'Lesson with a coach' => 25.0,
+            'Course / equipment rental' => 15.0,
+        ];
+
+        $cenaZaOsobu = $zakladneCeny[$typ] ?? 0;
+        return $cenaZaOsobu * $pocetOsob;
+    }
+
 
 }

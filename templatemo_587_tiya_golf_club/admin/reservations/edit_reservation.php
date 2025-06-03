@@ -15,6 +15,8 @@ $reservation = $reservationHandler->getReservationById($id);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = [
+        'full_name' => $_POST['full_name'],
+        'email' => $_POST['email'],
         'date' => $_POST['date'],
         'number_of_people' => $_POST['number_of_people'],
         'reservation_type' => $_POST['reservation_type'],
@@ -37,16 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <div class="container mt-5">
-    <h2>Edit Reservation</h2>
+    <h2>Edit Reservation <?= htmlspecialchars($reservation['id']) ?></h2>
     <form method="POST">
         <div class="mb-3">
             <label class="form-label">Full Name</label>
-            <input type="text" class="form-control" value="<?= htmlspecialchars($reservation['full_name']) ?>" disabled>
+            <input type="text" class="form-control" name="full_name" value="<?= htmlspecialchars($reservation['full_name']) ?>" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Email</label>
-            <input type="email" class="form-control" value="<?= htmlspecialchars($reservation['email']) ?>" disabled>
+            <input type="email" class="form-control" name="email" value="<?= htmlspecialchars($reservation['email']) ?>" required>
         </div>
 
         <div class="mb-3">

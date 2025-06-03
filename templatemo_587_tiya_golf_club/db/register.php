@@ -8,12 +8,10 @@ $username = $_POST['username'];
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-// Overenie údajov
 if (empty($username) || empty($email) || empty($password)) {
     die('All fields are required!');
 }
 
-// Uloženie správy do databázy
 try {
     $user = new Users();
     $user->register($username, $email, $password);
