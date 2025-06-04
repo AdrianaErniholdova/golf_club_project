@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once('../classes/Database.php');
 
 use database\Database;
@@ -9,25 +9,35 @@ $email = $_POST["email"];
 $message = $_POST["message"];
 
 if (empty($name) || empty($email) || empty($message)) {
-    die('All fields are required!');
+    $_SESSION['contact_error'] = 'All fields are required!';
+    header('Location: ../index.php#contact');
+    exit;
 }
 
-$db = (new Database())->getConnection();
+try {
+    $db = (new Database())->getConnection();
 
-$sql = "INSERT INTO kontaktny_formular (name, email, message) VALUES (:name, :email, :message)";
-$stmt = $db->prepare($sql);
+    $sql = "INSERT INTO kontaktny_formular (name, email, message) VALUES (:name, :email, :message)";
+    $stmt = $db->prepare($sql);
 
-$ulozene = $stmt->execute([
-    ':name' => $name,
-    ':email' => $email,
-    ':message' => $message
-]);
+    $ulozene = $stmt->execute([
+        ':name' => $name,
+        ':email' => $email,
+        ':message' => $message
+    ]);
 
-if ($ulozene) {
-    header('Location: ../index.php');
+    if ($ulozene) {
+        $_SESSION['contact_success'] = 'Your message has been sent successfully.';
+        header('Location: ../index.php#contact');
+        exit;
+    } else {
+        $_SESSION['contact_error'] = 'Error sending message to database.';
+        header('Location: ../index.php#contact');
+        exit;
+    }
+} catch (Exception $e) {
+    $_SESSION['contact_error'] = 'An error occurred while sending your message.';
+    header('Location: ../index.php#contact');
     exit;
-} else {
-    http_response_code(500);
-    die('Error sending message to database!');
 }
 ?>

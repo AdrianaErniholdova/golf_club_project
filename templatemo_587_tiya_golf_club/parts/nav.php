@@ -66,7 +66,7 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/golf_club_project/templatemo_587_tiya
                 <div class="mb-4">
                     <label class="form-label mb-2" for="member-login-number">Username</label>
 
-                    <input type="text" name="member-login-number" id="member-login-number" class="form-control" placeholder="11002560" required>
+                    <input type="text" name="member-login-number" id="member-login-number" class="form-control" placeholder="Username" required>
                 </div>
 
                 <div class="mb-4">
@@ -74,7 +74,17 @@ include_once $_SERVER['DOCUMENT_ROOT'] . '/golf_club_project/templatemo_587_tiya
 
                     <input type="password" name="member-login-password" id="member-login-password" pattern="[0-9a-zA-Z]{4,10}" class="form-control" placeholder="Password" required="">
                 </div>
-
+                <?php if (isset($_GET['error']) && $_GET['error'] == 1): ?>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function () {
+                            var offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasExample'));
+                            offcanvas.show();
+                        });
+                    </script>
+                    <div class="alert alert-danger text-center">
+                        Incorrect username or password.
+                    </div>
+                <?php endif; ?>
                 <div class="col-lg-5 col-md-7 col-8 mx-auto">
                     <button type="submit" class="form-control" >Login</button>
                 </div>

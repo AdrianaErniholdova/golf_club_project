@@ -23,7 +23,7 @@ class Users extends Database {
             $statement->execute();
             $existingUser = $statement->fetch();
             if ($existingUser) {
-                throw new \Exception("User already exists");
+                return false;
             }
 
             $sql = "INSERT INTO users (login, email, heslo, rola) VALUES (?, ?, ?, ?)";
@@ -32,11 +32,14 @@ class Users extends Database {
             $statement->bindParam(2, $email);
             $statement->bindParam(3, $hashedPassword);
             $statement->bindParam(4, $this->rola);
-            $statement->execute();
+            if ($statement->execute()) {
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception $e) {
-            echo "Error inserting into database: " . $e->getMessage();
-        } finally {
-            $this->connection = null;
+            error_log("Registration error: " . $e->getMessage());
+            return false;
         }
     }
 

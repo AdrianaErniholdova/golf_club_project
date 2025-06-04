@@ -7,7 +7,7 @@ use users\Users;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $loginOrEmail = $_POST['member-login-number'];
     $password = $_POST['member-login-password'];
-    $redirectUrl = $_POST['redirect'] ?? 'index.php';
+    $redirectUrl = '../index.php';
 
     try {
         $userObj = new Users();
@@ -24,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         exit;
     } catch (Exception $e) {
-        echo 'Login error: ' . $e->getMessage();
+        header('Location: ' . $redirectUrl . '?error=1');
+        exit;
     }
 }

@@ -1,3 +1,8 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!doctype html>
 <html lang="en">
 <!--head-->
@@ -147,7 +152,7 @@ if(!include($file_path)) {
                 <div class="container">
                     <div class="row">
 
-                        <div class="col-lg-12 col-12 text-center mx-auto mb-lg-5 mb-4">
+                        <div class="col-lg-12 col-12 text-center mx-auto mb-lg-5 mb-4" id="register">
                             <h2><span>Membership</span> at Tiya</h2>
                         </div>
 
@@ -292,7 +297,19 @@ if(!include($file_path)) {
 
                                         <label for="floatingInput">Password</label>
                                     </div>
+                                <?php if (isset($_SESSION['register_error'])): ?>
+                                    <div class="alert alert-danger text-center">
+                                        <?= htmlspecialchars($_SESSION['register_error']) ?>
+                                    </div>
+                                    <?php unset($_SESSION['register_error']); ?>
+                                <?php endif; ?>
 
+                                <?php if (isset($_SESSION['register_success'])): ?>
+                                    <div class="alert alert-success text-center">
+                                        <?= htmlspecialchars($_SESSION['register_success']) ?>
+                                    </div>
+                                    <?php unset($_SESSION['register_success']); ?>
+                                <?php endif; ?>
                                     <button type="submit" class="form-control">Register</button>
                                 </div>
                             </form>
@@ -309,10 +326,10 @@ if(!include($file_path)) {
                     <div class="row">
 
                         <div class="col-lg-5 col-12">
-                            <form action="db/spracovanieFormulara.php" method="post" class="custom-form contact-form" role="form">
+                            <form action="db/spracovanieFormulara.php" id="contact" method="post" class="custom-form contact-form" role="form">
                                 <h2 class="mb-4 pb-2">Any questions? <br> Contact Us</h2>
 
-                                <div class="row">
+                                <div class="row" >
                                     <div class="col-lg-6 col-md-6 col-12">
                                         <div class="form-floating">
                                             <input type="text" name="name" id="name" class="form-control" placeholder="Full Name" required="">
@@ -335,8 +352,20 @@ if(!include($file_path)) {
                                             
                                             <label for="floatingTextarea">Message</label>
                                         </div>
+                                        <?php if (isset($_SESSION['contact_error'])): ?>
+                                            <div class="alert alert-danger text-center">
+                                                <?= htmlspecialchars($_SESSION['contact_error']) ?>
+                                            </div>
+                                            <?php unset($_SESSION['contact_error']); ?>
+                                        <?php endif; ?>
 
-                                        <button type="submit" class="form-control">Submit Form</button>
+                                        <?php if (isset($_SESSION['contact_success'])): ?>
+                                            <div class="alert alert-success text-center">
+                                                <?= htmlspecialchars($_SESSION['contact_success']) ?>
+                                            </div>
+                                            <?php unset($_SESSION['contact_success']); ?>
+                                        <?php endif; ?>
+                                        <button type="submit" class="form-control" >Submit Form</button>
                                     </div>
                                 </div>
                             </form>
