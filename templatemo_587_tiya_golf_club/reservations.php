@@ -1,23 +1,14 @@
 <?php
-require_once __DIR__ . '/classes/Database.php';
+if (session_status() === PHP_SESSION_NONE) session_start();
 require_once __DIR__ . '/classes/Reservations.php';
 
-use database\Database;
 use reservations\Reservations;
 
-$database = new Database();
-$pdo = $database->getConnection();
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+$reservations = new Reservations();
 $userReservations = [];
 
 if (isset($_SESSION['user_id'])) {
-    $userId = $_SESSION['user_id'];
-    $reservations = new Reservations();
-    $userReservations = $reservations->getReservationsByUserId($userId);
+    $userReservations = $reservations->getReservationsByUserId($_SESSION['user_id']);
 }
 
 $success = null;
@@ -27,36 +18,24 @@ if (isset($_SESSION['success_message'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $errors = [];
+    $data = [
+        'full_name' => $_POST['full_name'],
+        'email' => $_POST['email'],
+        'reservation_type' => $_POST['reservation_type'],
+        'date' => $_POST['date'],
+        'number_of_people' => $_POST['number_of_people'],
+        'comment' => $_POST['comment'] ?? '',
+        'status' => 'pending',
+        'user_id' => $_SESSION['user_id']
+    ];
 
-    if (empty($_POST['full_name'])) $errors[] = "Required";
-    if (empty($_POST['email'])) $errors[] = "Required";
-    if (empty($_POST['reservation_type'])) $errors[] = "Required";
-    if (empty($_POST['date'])) $errors[] = "Required";
-    if (empty($_POST['number_of_people']) || $_POST['number_of_people'] < 1) $errors[] = "Required";
-
-    if (empty($errors)) {
-        $data = [
-            'full_name' => $_POST['full_name'],
-            'email' => $_POST['email'],
-            'reservation_type' => $_POST['reservation_type'],
-            'date' => $_POST['date'],
-            'number_of_people' => $_POST['number_of_people'],
-            'comment' => $_POST['comment'] ?? '',
-            'status' => 'pending',
-            'user_id' => $_SESSION['user_id']
-        ];
-
-        try {
-            $reservations = new Reservations();
-            $reservations->vytvorenieRezervacie($data);
-
-            $_SESSION['success_message'] = "Reservation was successfully created.";
-            header("Location: " . $_SERVER['PHP_SELF']);
-            exit;
-        } catch (Exception $e) {
-            $errors[] = "Error: " . $e->getMessage();
-        }
+    try {
+        $reservations->vytvorenieRezervacie($data);
+        $_SESSION['success_message'] = "Reservation was successfully created.";
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
     }
 }
 ?>
@@ -132,7 +111,16 @@ if(!include($file_path)) {
                                 <td><?php echo htmlspecialchars($reservation['price']); ?> €</td>
                                 <td><?php echo htmlspecialchars($reservation['status']); ?></td>
                                 <td>
-                                    <a href="admin/reservations/delete_reservation.php?id=<?php echo $reservation['id']; ?>" style="color: #e07b5e; border: none; border-radius: 50px; padding: 8px 16px; font-size: 0.85rem; font-weight: 500; text-decoration: none; display: inline-block; text-align: center;" onclick="return confirm('Are you sure you want to cancel this reservation?');">Cancel Reservation</a>
+                                    <?php if ($reservation['status'] != 'cancelled'): ?>
+                                        <a href="config/cancel_reservation.php?id=<?php echo $reservation['id']; ?>"
+                                           style="color: #e07b5e;"
+                                           onclick="return confirm('Are you sure you want to cancel this reservation?');">
+                                            Cancel Reservation
+                                        </a>
+                                    <?php else: ?>
+                                        <span></span>
+                                    <?php endif; ?>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                         </tbody>
@@ -212,7 +200,7 @@ if(!include($file_path)) {
                             <?php else: ?>
                                 <button type="button" class="btn btn-primary"
                                         onclick="alert('You must be logged in to proceed.');"
-                                        style="background-color: #3c405a; border-color: #3c405a; border-radius: 50px; padding: 10px 30px;">
+                                        style="background-color: #913030FF; border-color: #913030FF; border-radius: 50px; padding: 10px 30px;">
                                     Submit reservation
                                 </button>
                             <?php endif; ?>

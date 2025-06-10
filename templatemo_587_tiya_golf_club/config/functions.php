@@ -27,3 +27,11 @@ function printNavbarItems(): void {
         echo '</li>';
     }
 }
+
+function getImageNumber(string $imageFileName): string {
+    if (preg_match('/event(\d{2})\.jpg/', $imageFileName, $matches)) {
+        return $matches[1];
+    }
+    return '01';
+}
+

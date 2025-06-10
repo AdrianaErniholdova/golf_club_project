@@ -1,115 +1,99 @@
 <?php
 require_once __DIR__ . '/../../classes/Events.php';
+include_once __DIR__ . '/../../config/functions.php';
 
 use events\Events;
 
 $events = new Events();
-$pdo = $events->getConnection();
-
-$error = '';
-$success = '';
-
-$id = $_GET['id'] ?? null;
-
-if (!$id) {
-    die('Missing event id.');
-}
-
-$currentEvent = $events->getEventById($id);
-if (!$currentEvent) {
-    die('Event does not exist.');
-}
+$id = $_GET['id'] ?? die('Missing event id.');
+$currentEvent = $events->getEventById($id) ?: die('Event does not exist.');
+$selectedNumber = $_POST['image_number'] ?? '01';
+$imageFileName = 'event' . $selectedNumber . '.jpg';
+$currentImageNumber = getImageNumber($currentEvent['image']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = $_POST['title'] ?? '';
-    $date = $_POST['date'] ?? '';
-    $location = $_POST['location'] ?? '';
-    $price = $_POST['price'] ?? '';
-    $description = $_POST['description'] ?? '';
-    $imagePath = $currentEvent['image'];
-
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = '../../images/';
-        $fileName = basename($_FILES['image']['name']);
-        $targetPath = $uploadDir . $fileName;
-
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $targetPath)) {
-            $imagePath = $fileName;
-        }
-    }
-
-    if ($title && $date && $location && $price && $description) {
-        $update = $events->editovanieEventu($id, [
-            'title' => $title,
-            'date' => $date,
-            'location' => $location,
-            'price' => $price,
-            'description' => $description,
-            'image' => $imagePath
-        ]);
-
-        if ($update) {
-            $success = 'Event was successfully updated.';
-            header('Location: manage_events.php');
-        } else {
-            $error = 'Failed to update event.';
-        }
-    } else {
-        $error = 'All fields are required.';
-    }
+    $data = [
+        'id' => $id,
+        'title' => $_POST['title'] ?? '',
+        'date' => $_POST['date'] ?? '',
+        'location' => $_POST['location'] ?? '',
+        'price' => $_POST['price'] ?? '',
+        'description' => $_POST['description'] ?? '',
+        'image' => $imageFileName,
+    ];
+    $events->editovanieEventu($id, $data);
+    header('Location: manage_events.php');
+    exit;
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
-
+<?php  $file_path = "../../parts/head.php";
+if(!include($file_path)) {
+    echo"Failed to include $file_path";} ?>
 <body>
 <main>
-
     <section class="container mt-5">
-        <h2>Add New Event</h2>
+        <h2 class="text-center mb-4">Edit Event #<?= htmlspecialchars($currentEvent['id']) ?></h2>
+        <div class="card shadow rounded overflow-hidden border-0 mb-5">
+            <div class="card-body p-4">
+                <form method="POST" action="" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="title" class="form-label">Event Title:</label>
+                            <input type="text" class="form-control" name="title" id="title" required
+                                   value="<?= htmlspecialchars($currentEvent['title']) ?>">
+                        </div>
 
-        <?php if ($error): ?>
-            <div class="alert alert-danger"><?= $error ?></div>
-        <?php endif; ?>
-        <?php if ($success): ?>
-            <div class="alert alert-success"><?= $success ?></div>
-        <?php endif; ?>
+                        <div class="col-md-6">
+                            <label for="date" class="form-label">Event Date:</label>
+                            <input type="datetime-local" class="form-control" name="date" id="date" required
+                                   value="<?= date('Y-m-d\TH:i', strtotime($currentEvent['date'])) ?>">
+                        </div>
+                    </div>
 
-        <form method="POST" action="" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="title" class="form-label">Event Title</label>
-                <input type="text" class="form-control" name="title" id="title" required>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="location" class="form-label">Location:</label>
+                            <input type="text" class="form-control" name="location" id="location" required
+                                   value="<?= htmlspecialchars($currentEvent['location']) ?>">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="price" class="form-label">Ticket Price (€):</label>
+                            <input type="number" class="form-control" name="price" id="price" required step="0.01"
+                                   value="<?= htmlspecialchars($currentEvent['price']) ?>">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Event Description:</label>
+                        <textarea class="form-control" name="description" id="description" rows="3" required><?= htmlspecialchars($currentEvent['description']) ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="image_number" class="form-label">Image Number:</label>
+                        <select name="image_number" id="image_number" class="form-select" required>
+                            <?php
+                            for ($i = 1; $i <= 4; $i++) {
+                                $formatted = sprintf('%02d', $i);
+                                $selected = ($formatted === $currentImageNumber) ? 'selected' : '';
+                                echo "<option value=\"$formatted\" $selected> $formatted </option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary"
+                                style="background-color: #913030; border-color: #913030; border-radius: 50px; padding: 10px 30px;">
+                            Update Event
+                        </button>
+                    </div>
+                </form>
             </div>
-
-            <div class="mb-3">
-                <label for="date" class="form-label">Event Date</label>
-                <input type="date" class="form-control" name="date" id="date" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="location" class="form-label">Location</label>
-                <input type="text" class="form-control" name="location" id="location" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="price" class="form-label">Ticket Price</label>
-                <input type="number" class="form-control" name="price" id="price" required step="0.01">
-            </div>
-
-            <div class="mb-3">
-                <label for="description" class="form-label">Event Description</label>
-                <textarea class="form-control" name="description" id="description" rows="3" required></textarea>
-            </div>
-
-            <div class="mb-3">
-                <label for="image" class="form-label">Event Image</label>
-                <input type="file" class="form-control" name="image" id="image" accept="image/*">
-            </div>
-
-            <button type="submit" class="btn btn-primary">Edit</button>
-        </form>
+        </div>
     </section>
 
 </main>

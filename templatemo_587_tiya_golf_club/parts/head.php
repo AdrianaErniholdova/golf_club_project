@@ -5,7 +5,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Tiya Golf Club - Free HTML CSS Template</title>
+    <title>Tiya Golf Club</title>
 
     <!-- CSS FILES -->
     <base href="/golf_club_project/templatemo_587_tiya_golf_club/">

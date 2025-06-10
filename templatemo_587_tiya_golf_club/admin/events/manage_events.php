@@ -1,16 +1,10 @@
 <?php
-require_once __DIR__ . '/../../classes/Database.php';
 require_once __DIR__ . '/../../classes/Events.php';
 
-use database\Database;
 use events\Events;
 
 $eventsHandler = new Events();
-$database = new Database();
-$pdo = $database->getConnection();
-
-$stmt = $pdo->query("SELECT * FROM events ORDER BY date DESC");
-$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$events = $eventsHandler->getAllEvents();
 ?>
 <!doctype html>
 <html lang="en">

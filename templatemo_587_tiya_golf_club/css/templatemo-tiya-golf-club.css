@@ -695,7 +695,7 @@ strong {
   BACKGROUND IMAGE SECTION        
 -----------------------------------------*/
 .section-bg-image {
-  background-image: url('../images/event2.jpg');
+  background-image: url('../images/event02.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -1286,4 +1286,5 @@ strong {
     padding: 4px 12px;
   }
 }
+
 

@@ -1,5 +1,5 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) session_start();
 require_once('../classes/Database.php');
 
 use database\Database;
@@ -27,7 +27,7 @@ try {
     ]);
 
     if ($ulozene) {
-        $_SESSION['contact_success'] = 'Your message has been sent successfully.';
+        $_SESSION['contact_success'] = 'Your message has been successfully sent.';
         header('Location: ../index.php#contact');
         exit;
     } else {

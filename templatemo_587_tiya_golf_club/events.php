@@ -1,37 +1,37 @@
 <?php
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-require_once __DIR__ . '/classes/Database.php';
+if (session_status() === PHP_SESSION_NONE) session_start();
 require_once __DIR__ . '/classes/Events.php';
 
-use database\Database;
 use events\Events;
 
-$eventsHandler = new Events();
-$database = new Database();
-$pdo = $database->getConnection();
-
-$stmt = $pdo->query("SELECT * FROM events ORDER BY date DESC");
-$events = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+$event = new Events();
+$events = $event->getAllEvents();
 $userTickets = [];
 
 if (isset($_SESSION['user_id'])) {
-    $stmt = $pdo->prepare("
-        SELECT e.title, e.date, e.location 
-        FROM event_tickets et
-        JOIN events e ON et.event_id = e.id
-        WHERE et.user_id = ?
-        ORDER BY e.date DESC
-    ");
-    $stmt->execute([$_SESSION['user_id']]);
-    $userTickets = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $userTickets = $event->getUserTickets($_SESSION['user_id']);
+}
+
+$success = null;
+if (isset($_SESSION['success_message'])) {
+    $success = $_SESSION['success_message'];
+    unset($_SESSION['success_message']);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_id'])) {
+    try {
+        $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
+        for ($i = 0; $i < $quantity; $i++) {
+            $event->buyTicket($_SESSION['user_id'], (int)$_POST['event_id']);
+        }
+        $_SESSION['success_message'] = "Successfully purchased $quantity tickets.";
+        header("Location: events.php");
+        exit;
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
 }
 ?>
-
 <!doctype html>
 <html lang="en">
 <!--head-->
@@ -75,6 +75,11 @@ if(!include($file_path)) {
 
             <section class="events-section section-padding" id="section_2">
                 <div class="container">
+                    <?php if (isset($success)): ?>
+                        <div class="alert alert-success">
+                            <?php echo htmlspecialchars($success); ?>
+                        </div>
+                    <?php endif; ?>
                     <div class="row">
 
                         <?php if (!empty($userTickets)): ?>
@@ -88,6 +93,8 @@ if(!include($file_path)) {
                                                 Date: <?= htmlspecialchars($ticket['date']) ?><br>
                                                 Location: <?= htmlspecialchars($ticket['location']) ?>
                                             </div>
+                                            <div>
+                                                Quantity: <?= htmlspecialchars($ticket['quantity']) ?></div>
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
@@ -108,9 +115,14 @@ if(!include($file_path)) {
 
                                 <div class="custom-btn-wrap">
                                     <?php if (isset($_SESSION['rola']) && $_SESSION['rola'] === 'pouzivatel'): ?>
-                                        <form action="user/event_tickets.php" method="POST">
+                                        <form action="events.php" method="POST" class="d-flex align-items-center w-100">
                                             <input type="hidden" name="event_id" value="<?= $event['id'] ?>">
-                                            <button type="submit" class="btn custom-btn">Buy Ticket</button>
+                                            <button type="submit" class="btn custom-btn" style="margin: 0">Buy Ticket(s)</button>
+                                            <div class="d-flex align-items-center gap-1" style="background:#E07B5EFF; border-radius: 5px; padding: 15px;">
+                                                <label for="quantity_<?= $event['id'] ?>" class="form-label mb-0 text-white">Qty:</label>
+                                                <input type="number" name="quantity" id="quantity_<?= $event['id'] ?>"
+                                                       min="1" max="10" value="1" class="form-control form-control-sm" style="width: 70px;">
+                                            </div>
                                         </form>
                                     <?php else: ?>
                                         <a href="#" class="btn custom-btn" onclick="alert('Must be logged in to proceed'); return false;">
@@ -118,7 +130,6 @@ if(!include($file_path)) {
                                         </a>
                                     <?php endif; ?>
                                 </div>
-
                             </div>
 
                             <div class="custom-block-info">
@@ -135,7 +146,7 @@ if(!include($file_path)) {
                                     </div>
 
                                     <div class="d-flex flex-wrap align-items-center">
-                                        <span class="custom-block-span">Ticket:</span>
+                                        <span class="custom-block-span">Ticket Price:</span>
 
                                         <p class="mb-0">$<?= $event['price'] ?></p>
                                     </div>

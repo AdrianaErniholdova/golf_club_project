@@ -5,10 +5,16 @@ use PDO;
 use PDOException;
 use Exception;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/golf_club_project/templatemo_587_tiya_golf_club/config/db.php';
-
 class Database
 {
+    private const DATABASE_CONFIG = [
+        'HOST' => 'localhost',
+        'DBNAME' => 'golf_club_project',
+        'PORT' => 3306,
+        'USER_NAME' => 'root',
+        'PASSWORD' => ''
+    ];
+
     private $connection;
 
     public function __construct()
@@ -18,8 +24,7 @@ class Database
 
     public function connect(): void
     {
-        $config = DATABASE;
-
+        $config = self::DATABASE_CONFIG;
         $options = [
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -37,7 +42,6 @@ class Database
                 $options
             );
         } catch (PDOException $e) {
-
             throw new Exception('Connection failed: ' . $e->getMessage());
         }
     }

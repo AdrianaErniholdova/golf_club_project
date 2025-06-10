@@ -2,8 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-include_once $_SERVER['DOCUMENT_ROOT'] . '/golf_club_project/templatemo_587_tiya_golf_club/config/functions.php';
+include_once __DIR__ . '/../config/functions.php';
 ?>
 
 <nav class="navbar navbar-expand-lg custom-navbar">
