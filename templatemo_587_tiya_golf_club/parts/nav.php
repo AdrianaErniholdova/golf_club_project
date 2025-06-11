@@ -59,7 +59,6 @@ include_once __DIR__ . '/../config/functions.php';
     </div>
     <div class="offcanvas-body d-flex flex-column">
         <form class="custom-form member-login-form" action="auth/login.php" method="post" role="form">
-            <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
             <div class="member-login-form-body">
                 <div class="mb-4">
