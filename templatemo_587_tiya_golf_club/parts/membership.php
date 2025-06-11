@@ -127,7 +127,7 @@
 
             <div class="col-lg-5 col-12 mx-auto">
                 <h4 class="mb-4 pb-lg-2">Please join us!</h4>
-                <form action="db/register.php" method="post" class="custom-form membership-form shadow-lg" role="form">
+                <form action="auth/register.php" method="post" class="custom-form membership-form shadow-lg" role="form">
                     <h4 class="text-white mb-4">Become a member</h4>
 
                     <div class="form-floating">

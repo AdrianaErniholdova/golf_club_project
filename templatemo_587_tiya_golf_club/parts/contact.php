@@ -5,7 +5,7 @@
             <div class="row">
 
                 <div class="col-lg-5 col-12">
-                    <form action="db/spracovanieFormulara.php" id="contact" method="post" class="custom-form contact-form" role="form">
+                    <form action="config/spracovanieFormulara.php" id="contact" method="post" class="custom-form contact-form" role="form">
                         <h2 class="mb-4 pb-2">Any questions? <br> Contact Us</h2>
 
                         <div class="row" >

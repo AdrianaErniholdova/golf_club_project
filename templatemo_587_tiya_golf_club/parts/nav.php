@@ -17,7 +17,7 @@ include_once __DIR__ . '/../config/functions.php';
 
         <div class="d-lg-none ms-auto me-3">
             <?php if (isset($_SESSION['login'])): ?>
-                <a class="btn custom-btn custom-border-btn" href="db/logout.php">
+                <a class="btn custom-btn custom-border-btn" href="auth/logout.php">
                     Logout (<?= htmlspecialchars($_SESSION['rola']) ?>)
                 </a>
             <?php else: ?>
@@ -38,7 +38,7 @@ include_once __DIR__ . '/../config/functions.php';
 
             <div class="d-none d-lg-block ms-lg-3">
                 <?php if (isset($_SESSION['login'])): ?>
-                    <a class="btn custom-btn custom-border-btn" href="db/logout.php">
+                    <a class="btn custom-btn custom-border-btn" href="auth/logout.php">
                         Logout (<?= htmlspecialchars($_SESSION['login']) ?>)
                     </a>
                 <?php else: ?>
@@ -58,7 +58,7 @@ include_once __DIR__ . '/../config/functions.php';
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column">
-        <form class="custom-form member-login-form" action="db/login.php" method="post" role="form">
+        <form class="custom-form member-login-form" action="auth/login.php" method="post" role="form">
             <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_SERVER['REQUEST_URI']); ?>">
 
             <div class="member-login-form-body">
